@@ -1,0 +1,31 @@
+#root {
+  max-width: 1280px;
+  margin: 0;
+  text-align: center;
+}
+
+body {
+  margin: 0; 
+  padding: 0;
+}
+
+
+.navbar {
+  overflow: hidden;
+  background-color:antiquewhite;
+  position:fixed;
+  top:0;
+  width:100%;
+  margin:0;
+}
+
+.navbar a{
+  float: left;
+  display:block;
+  text-align: center;
+  padding: 14px 20px;
+  margin:0;
+}
+.navbar a:hover{
+  font-weight:bold;
+}

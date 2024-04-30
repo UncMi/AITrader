@@ -1,0 +1,33 @@
+//const csv_file = fs.readFileSync(filePath,'utf-8');
+//  for (const row of rows) {
+        //     // Skip empty rows
+        //     if (!row.trim()) continue;
+
+        //     // Split the row by tabs to get individual values
+        //     const values = row.split("\t");
+
+        //     // Extract values from the row
+        //     const date = values[0];
+        //     const initial = parseFloat(values[1]);
+        //     const high = parseFloat(values[2]);
+        //     const low = parseFloat(values[3]);
+        //     const open = parseFloat(values[4]);
+        //     const volume = parseFloat(values[5]);
+
+        //     // Construct an object with the extracted values
+        //     const formattedRow = {
+        //         date,
+        //         initial,
+        //         high,
+        //         low,
+        //         open,
+        //         volume,
+        //     };
+            
+        //     forexInfo.push(forexInfo)
+            
+
+            
+        // }
+        // await ForexInfo.create(forexInfo);
+        // res.json(forexInfo)

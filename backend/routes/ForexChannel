@@ -1,0 +1,21 @@
+const http = require('http');
+const socketIO = require('socket.io');
+
+const server = http.createServer(onRequest);
+const io = socketIO(server);
+
+function subscribeToChannel(channel, callback) {
+  let client = redis.createClient();
+  client.on('connect', function() {
+    client.subscribe(channel);
+    client.on('message', callback);
+  });
+}
+
+// Receive messages from a channel
+function receiveMessage(channel, message) {
+  // Do something with the message
+}
+
+// Call the subscribeToChannel function and pass it the channel and callback
+subscribeToChannel('myChannel', receiveMessage);
