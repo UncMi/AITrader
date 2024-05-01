@@ -8,7 +8,7 @@ import ForexGraph from './Components/ForexGraph';
 function App() {
 
   const [listOfPosts, setListOfPosts] = useState([]);
-
+  axios.get(`http://localhost:3001/forex/H1`)
 
   return (
     <>

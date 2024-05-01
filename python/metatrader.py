@@ -42,7 +42,7 @@ if(timeframe == mt.TIMEFRAME_MN1):
     date1 = date2 - timedelta(days=365*2)
 
 if(timeframe == mt.TIMEFRAME_D1):
-    date1 = date2 - timedelta(days=30)
+    date1 = date2 - timedelta(days=40)
 
 elif(timeframe == mt.TIMEFRAME_H1):
     if date1.weekday() in [5, 6] or date2.weekday() in [5, 6]:
