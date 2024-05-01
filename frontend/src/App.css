@@ -29,3 +29,44 @@ body {
 .navbar a:hover{
   font-weight:bold;
 }
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown button styling */
+.dropdown-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  z-index: 1;
+  border: 1px solid #ccc; /* Add border */
+  border-top: none; /* Remove top border */
+}
+
+/* Dropdown option styling */
+.dropdown-option {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  cursor: pointer;
+  border-top: 1px solid #ccc; /* Add border */
+}
+
+/* Style for selected option */
+.dropdown-option:hover {
+  background-color: #ddd;
+}
