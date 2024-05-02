@@ -14,15 +14,9 @@ let test = {};
 //     args: [[2024,4,25]]
 // }
 
-router.get("/:timeframe", async (req, res) => {
-    const timeframe = req.params.timeframe; // Retrieve timeframe from URL parameter
-    fetchDataFromPython(timeframe); // Pass timeframe to fetchDataFromPython function
-    res.sendStatus(200); 
-});
 
-function fetchDataFromPython(timeframe) {
-    console.log(timeframe)
-    const pythonProcess = spawnSync('python', ['../python/RandomForexInfo.py', timeframe]);
+function fetchDataFromPython() {
+    const pythonProcess = spawnSync('python', ['../python/RandomForexInfo.py']);
 
     if (pythonProcess.stderr.length > 0) {
         console.error(`Error executing Python script: ${pythonProcess.stderr.toString()}`);
@@ -64,21 +58,19 @@ function fetchDataFromPython(timeframe) {
         data.push(rowData);
     }
 
-    // Convert the parsed data to JSON
-    jsonData = data
-
-    console.log("Python script execution completed.");
+    console.log("Python forexhistorical executed")
+    return data;
 }
 
 // Initial data fetch
-fetchDataFromPython();
+
 
 // Set interval to periodically fetch data from Python script
 //const interval = setInterval(fetchDataFromPython, 6000); 
 
 // Route handler for fetching forex info
 router.get("/", async (req, res) => {
-    // Send the forexInfo as response to the client
+    const jsonData = fetchDataFromPython();
     res.json(jsonData);
 });
 

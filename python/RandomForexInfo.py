@@ -16,7 +16,7 @@ server = 'MetaQuotes-Demo'
 mt.login(login, password, server)
 
 
-symbol_price = mt.symbol_info_tick("EURUSD")._asdict()
+#symbol_price = mt.symbol_info_tick("EURUSD")._asdict()
 # print(symbol_price)
 
 #pick a date between today and 1 year ago for random sampling.
