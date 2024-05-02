@@ -5,6 +5,7 @@ from datetime import datetime
 from datetime import datetime, timedelta
 from pprint import pprint
 import sys
+import random
 
 mt.initialize()
 
@@ -18,17 +19,23 @@ mt.login(login, password, server)
 symbol_price = mt.symbol_info_tick("EURUSD")._asdict()
 # print(symbol_price)
 
-endDate = [2024,4,25]
+#pick a date between today and 1 year ago for random sampling.
+timeframe = mt.TIMEFRAME_M15
+now = datetime.now()
+a_year_ago = now - timedelta(days=365*1)
+days_difference = (now - a_year_ago).days
+random_days = random.randint(0, days_difference)
+random_date = a_year_ago + timedelta(days=random_days)
 
-timeframe = mt.TIMEFRAME_H1
+date1 = random_date
+date2 = random_date
 
-date2 = datetime(endDate[0],endDate[1], endDate[2])
+if date1.weekday() in [5, 6] or date2.weekday() in [5, 6]:
+    date1 = date2 - timedelta(days=3)
+    date2 = date2 - timedelta(days=3)
+else:
+    date1 = date2 - timedelta(days=1)
 
-if(timeframe == mt.TIMEFRAME_H1):
-    date1 = date2 - timedelta(days=20)
-
-elif(timeframe == mt.TIMEFRAME_M15):
-    date1 = date2 - timedelta(days=5)
 
 ohlc_data = pd.DataFrame(mt.copy_rates_range("EURUSD", timeframe, date1, date2))
 

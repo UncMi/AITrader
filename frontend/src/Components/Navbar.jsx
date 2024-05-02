@@ -1,17 +1,20 @@
 /* eslint-disable no-unused-vars */
 import React, {	Component } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Navbar(){
 
-	return(
-		<div class="navbar"> 
-			<a>Home</a>
-			<a>Ai GraphGuessr Demo</a>
-			<a>ForexInfo</a>
-			<a>Economic News</a>
-		</div>
-		)
+    const navigate = useNavigate();
 
+    return(
+        <>
+            <div className="navbar"> 
+                <a onClick={() => navigate('/Home')}>Home</a>
+                <a onClick={() => navigate('/AIDemo')}>Ai GraphGuessr Demo</a>
+                <a onClick={() => navigate('/EconomicNews')}>Economic News</a>
+            </div>
+        </>
+    )
 }
 
 export default Navbar;

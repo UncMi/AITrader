@@ -1,73 +1,86 @@
 const express = require("express");
 const router = express.Router();
-const csv = require('csv-parser');
-const fs = require('fs');
+const { spawnSync } = require('child_process');
 const { ForexInfo } = require("../models");
-const { Readable } = require('stream');
-const { createDeflate } = require("zlib");
+const { json } = require("sequelize");
+const { PythonShell } = require("python-shell");
 
-const filePath = require("path").resolve(__dirname, "./EURUSD1.csv");
+let forexInfo = {};
+let jsonData = {};
+let test = {};
 
+// let pythonOptions = {
+//     scriptPath: "./../python",
+//     args: [[2024,4,25]]
+// }
+
+router.get("/:timeframe", async (req, res) => {
+    const timeframe = req.params.timeframe; // Retrieve timeframe from URL parameter
+    fetchDataFromPython(timeframe); // Pass timeframe to fetchDataFromPython function
+    res.sendStatus(200); 
+});
+
+function fetchDataFromPython(timeframe) {
+    console.log(timeframe)
+    const pythonProcess = spawnSync('python', ['../python/RandomForexInfo.py', timeframe]);
+
+    if (pythonProcess.stderr.length > 0) {
+        console.error(`Error executing Python script: ${pythonProcess.stderr.toString()}`);
+        return; // Return if there's an error
+    }
+
+    let pythonResponse = {};
+    // PythonShell.run("metatrader.py", pythonOptions, (err, res) => {
+    //     if (err) console.log(err);
+    //     if (res) console.log(res);
+    //     pythonResponse = res;
+    // });
+
+    
+    forexInfo = pythonProcess.stdout.toString('utf-8').trim();
+    const rows = forexInfo.split('0\r\n');
+    const data = [];
+
+    // Process each row
+    for (let i = 1; i < rows.length; i++) { // Start from index 1 to skip the header row
+        
+         const row = rows[i].trim();
+        // if (row.length === 0) continue; // Skip empty rows
+
+        // // Split the row into individual elements by whitespace
+        const elements = row.split(/\s+/)
+        // Create an object for the row data
+        const rowData = {
+            time: parseFloat(elements[1]),
+            open: parseFloat(elements[2]),
+            high: parseFloat(elements[3]),
+            low: parseFloat(elements[4]),
+            close: parseFloat(elements[5]),
+            tick_volume: parseFloat(elements[6]),
+        };
+    
+        // Check if any parsed value is not a valid float
+        // Push the row data to the array
+        data.push(rowData);
+    }
+
+    // Convert the parsed data to JSON
+    jsonData = data
+
+    console.log("Python script execution completed.");
+}
+
+// Initial data fetch
+fetchDataFromPython();
+
+// Set interval to periodically fetch data from Python script
+//const interval = setInterval(fetchDataFromPython, 6000); 
+
+// Route handler for fetching forex info
 router.get("/", async (req, res) => {
-    let limitValue = 5;
-
-    //checks if there is an additional limitValue in the query "/api/forex?limit=10"
-    if(req.query.limit && !isNaN(parseInt(req.query.limit))) {
-        limitValue = parseInt(req.query.limit);
-    }
-
-    const listOfForex = await ForexInfo.findAll({limit:limitValue});
-    res.json(listOfForex);
+    // Send the forexInfo as response to the client
+    res.json(jsonData);
 });
-
-router.post("/", async (req, res) => {
-
-    const forexData = [];
-
-    try {
-        // Create a readable stream from the CSV file content
-        
-        const readableStream = fs.createReadStream(filePath);
-        const forexData = [];
-        
-
-        readableStream
-        .pipe(csv())
-        .on('data', async (row) =>{
-            const rowData = Object.values(row)[0].split('\t');
-            console.log(rowData);
-            const date = rowData[0];
-            const initial = parseFloat(rowData[1]);
-            const high = parseFloat(rowData[2]);
-            const low = parseFloat(rowData[3]);
-            const open = parseFloat(rowData[4]);
-            const volume = parseFloat(rowData[5]);
-
-            const forexInstance = await ForexInfo.create({
-                date,
-                initial,
-                high,
-                low,
-                open,
-                volume,
-            });
-            forexData.push(forexInstance);
-
-        })
-        .on('end', () => {
-            console.log("CSV file successfully processed");
-            // Respond with success message or forexData
-            res.status(200).json({ message: "CSV file successfully processed", data: forexData });
-        });
-       
-        
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ message: error.message });
-    }
-});
-
-
 
 
 module.exports = router;
