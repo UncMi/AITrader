@@ -1,65 +1,101 @@
 const express = require("express");
 const router = express.Router();
-const { spawnSync } = require('child_process'); // Changed to spawnSync for synchronous execution
+const { spawnSync } = require('child_process');
 const { ForexMeta } = require("../models");
-const { sequelize } = require('../models');
+const { sequelize, Sequelize } = require('../models');
 
 const forexData = [];
 
 router.post("/", async (req, res) => {
 
-    const pythonProcess = spawnSync('python', ['../python/randomforexinfo.py']);
+    const { iterations } = req.body;
 
-    if (pythonProcess.stderr.length > 0) {
-        console.error(`Error executing Python script: ${pythonProcess.stderr.toString()}`);
-        return; // Return if there's an error
+    if (!iterations || isNaN(iterations) || iterations <= 0) {
+        return res.status(400).json({ error: 'Invalid or missing number of iterations' });
+    }
+    for (let iter = 0; iter < iterations; iter++) {
+        const existingTables = await sequelize.getQueryInterface().showAllTables();
+        let tableName = 'forexmeta';
+
+        if (existingTables.includes('forexmeta')) {
+            let index = 1;
+            while (existingTables.includes(`forexmeta_${index}`)) {
+                index++;
+            }
+            tableName = `forexmeta_${index}`;
+        } else {
+            tableName = 'forexmeta';
+        }
+
+        console.log(tableName);
+
+        const ForexInstance = sequelize.define(tableName, {
+            time: Sequelize.FLOAT,
+            open: Sequelize.FLOAT,
+            high: Sequelize.FLOAT,
+            low: Sequelize.FLOAT,
+            close: Sequelize.FLOAT,
+            tick_volume: Sequelize.FLOAT
+        }, {
+            tableName: tableName // Explicitly specify the table name
+        });
+
+        // Synchronize the model with the database
+        try {
+            await ForexInstance.sync();
+        } catch (error) {
+            console.error(`Error synchronizing model with database: ${error.message}`);
+            return res.status(500).json({ error: 'Error synchronizing model with database' });
+        }
+
+        const pythonProcess = spawnSync('python', ['../python/randomforexinfo.py']);
+
+        if (pythonProcess.stderr.length > 0) {
+            console.error(`Error executing Python script: ${pythonProcess.stderr.toString()}`);
+            return res.status(500).json({ error: 'Error executing Python script' });
+        }
+
+        const forexInfo = pythonProcess.stdout.toString('utf-8').trim();
+        const rows = forexInfo.split('0\r\n');
+        console.log("post received");
+
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i].trim();
+            const elements = row.split(/\s+/);
+
+            if (elements.length < 7) {
+                console.error(`Incomplete data at row ${i + 1}: ${row}`);
+                continue;
+            }
+
+            const time = parseFloat(elements[1]);
+            const open = parseFloat(elements[2]);
+            const high = parseFloat(elements[3]);
+            const low = parseFloat(elements[4]);
+            const close = parseFloat(elements[5]);
+            const tick_volume = parseFloat(elements[6]);
+
+            try {
+                const instance = await ForexInstance.create({
+                    time,
+                    open,
+                    high,
+                    low,
+                    close,
+                    tick_volume
+                });
+                console.log(`Row ${i} processed`);
+                forexData.push(instance);
+            } catch (error) {
+                console.error(`Error creating Forex instance at row ${i}: ${error.message}`);
+                return res.status(500).json({ error: 'Error saving Forex data' });
+            }
+        }
+
     }
     
-    forexInfo = pythonProcess.stdout.toString('utf-8').trim();
-    const rows = forexInfo.split('0\r\n');
-    const data = [];
-    console.log("post received")
-    // Process each row
-    for (let i = 1; i < rows.length; i++) { 
-        
-        const row = rows[i].trim();
-        const elements = row.split(/\s+/)
 
-
-        
-
-
-        if (elements.length < 7) {
-            console.error(`Incomplete data at row ${i + 1}: ${row}`);
-            continue; // Skip this row if it's incomplete
-        }
-        console.log(elements)
-        
-        const time =  parseFloat(elements[1])
-        const open = parseFloat(elements[2])
-        const high = parseFloat(elements[3])
-        const low = parseFloat(elements[4])
-        const close = parseFloat(elements[5])
-        const tick_volume = parseFloat(elements[6])
-        
-        try {
-            const ForexInstance = await ForexMeta.create({
-                time,
-                open,
-                high,
-                low,
-                close,
-                tick_volume
-            });
-            console.log(`Row ${i} processed`);
-            forexData.push(ForexInstance);
-        } catch (error) {
-            console.error(`Error creating Forex instance at row ${i}: ${error.message}`);
-            return res.status(500).json({ error: 'Error saving Forex data' }); // Sending error response
-        }
-    }
-
-    return res.status(200).json({ message: 'Forex data saved successfully', data: forexData }); // Sending success response
+    return res.status(200).json({ message: 'Forex data saved successfully', data: forexData });
 });
 
 module.exports = router;
