@@ -12,10 +12,13 @@ app.use(cors());
 const postRouter = require("./routes/Posts")
 const forexInfoRouter = require("./routes/Forex")
 const forexHistorical = require("./routes/ForexHistorical")
+const metaData = require("./routes/MetaSave")
+
 
 app.use("/posts", postRouter);
 app.use("/forex", forexInfoRouter);
 app.use("/forexh", forexHistorical);
+app.use("/meta", metaData);
 
 
 db.sequelize.sync().then(() => {

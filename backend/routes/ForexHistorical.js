@@ -33,6 +33,7 @@ function fetchDataFromPython() {
     
     forexInfo = pythonProcess.stdout.toString('utf-8').trim();
     const rows = forexInfo.split('0\r\n');
+    console.log(rows);
     const data = [];
 
     // Process each row

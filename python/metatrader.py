@@ -26,11 +26,11 @@ timeframe_constants = {
     'D1': mt.TIMEFRAME_D1,
     'MN1': mt.TIMEFRAME_MN1
 }
-
 if timeframe_arg in timeframe_constants:
     timeframe = timeframe_constants[timeframe_arg]
     print("Selected timeframe:", timeframe)
 else:
+    timeframe = mt.TIMEFRAME_H1
     print("Invalid timeframe argument:", timeframe_arg)
 
 endDate = datetime.now()
@@ -44,17 +44,15 @@ if(timeframe == mt.TIMEFRAME_MN1):
 elif(timeframe == mt.TIMEFRAME_D1):
     date1 = date2 - timedelta(days=40)
 
-if(timeframe == mt.TIMEFRAME_H1):
+elif(timeframe == mt.TIMEFRAME_H1):
     if date1.weekday() in [5, 6] or date2.weekday() in [5, 6]:
         date1 = date2 - timedelta(days=4)
-        date2 = date2 - timedelta(days=4)
     else:
         date1 = date2 - timedelta(days=2)
 
-if timeframe == mt.TIMEFRAME_M15:
+else:
     if date1.weekday() in [5, 6] or date2.weekday() in [5, 6]:
         date1 = date2 - timedelta(days=3)
-        date2 = date2 - timedelta(days=3)
     else:
         date1 = date2 - timedelta(days=1)
 
