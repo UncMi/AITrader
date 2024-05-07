@@ -12,6 +12,7 @@ function Navbar(){
                 <a onClick={() => navigate('/Home')}>Home</a>
                 <a onClick={() => navigate('/AIDemo')}>Ai GraphGuessr Demo</a>
                 <a onClick={() => navigate('/EconomicNews')}>Economic News</a>
+                <a onClick={() => navigate('/AIStatistics')}>AI Statistics</a>
             </div>
         </>
     )
