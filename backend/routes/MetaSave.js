@@ -98,4 +98,25 @@ router.post("/", async (req, res) => {
     return res.status(200).json({ message: 'Forex data saved successfully', data: forexData });
 });
 
+
+
+
+router.get("/", async (req, res) => {
+    try {
+        const dataLengths = {};
+        const forexData = await ForexMeta.findAll();
+        for(let i=1; i<1000; i++){
+            const tableName = `forexmeta_${i}`;
+            const forexQueryResult =  await sequelize.query(`SELECT COUNT(*) AS count FROM ${tableName}`);
+            const count = forexQueryResult[0][0].count;
+            dataLengths[tableName] = count;
+        }
+        console.log("DataLengths: ", dataLengths)
+        return res.status(200).json({ dataLength: dataLengths.length });
+    } catch (error) {
+        console.error(`Error fetching Forex data: ${error.message}`);
+        return res.status(500).json({ error: 'Error fetching Forex data' });
+    }
+});
+
 module.exports = router;
