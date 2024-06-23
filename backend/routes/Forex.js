@@ -38,6 +38,7 @@ function fetchDataFromPython(timeframe) {
 
     
     forexInfo = pythonProcess.stdout.toString('utf-8').trim();
+    console.log(forexInfo)
     const rows = forexInfo.split('0\r\n');
     const data = [];
 

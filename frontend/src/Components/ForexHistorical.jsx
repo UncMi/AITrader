@@ -13,12 +13,14 @@ function ForexHistorical() {
     setShowOptions(!showOptions);
   };
 
+  
+  
+
 
   useEffect(() => {
     const options = {
       series: [{
         name: 'candle',
-        //open-high-low-close
         data: []
       }],
       chart: {
@@ -26,7 +28,7 @@ function ForexHistorical() {
         type: 'candlestick',
       },
       title: {
-        text: `EURUSD M15`, // Dynamic title based on selectedTimeframe
+        text: `EURUSD ${selectedTimeframe}`, // Dynamic title based on selectedTimeframe
         align: 'left'
       },
       annotations: {
@@ -56,12 +58,36 @@ function ForexHistorical() {
         labels: {
           formatter: function(val) {
             return dayjs(val).format('MMM DD HH:mm');
+          },
+          style: {
+            colors: '#D100FF' // Set the color for x-axis labels
           }
+        },
+        axisBorder: {
+          show: true,
+          color: '#FF0000' // Set the color for the x-axis border
+        },
+        axisTicks: {
+          show: true,
+          color: '#FF0000' // Set the color for the x-axis ticks
         }
       },
       yaxis: {
         tooltip: {
           enabled: true
+        },
+        labels: {
+          style: {
+            colors: '#D100FF' // Set the color for y-axis labels
+          }
+        },
+        axisBorder: {
+          show: true,
+          color: '#FF0000' // Set the color for the y-axis border
+        },
+        axisTicks: {
+          show: true,
+          color: '#FF0000' // Set the color for the y-axis ticks
         }
       }
     };

@@ -8,9 +8,10 @@ import sys
 
 mt.initialize()
 
-login = 10002425763
-password = '+pMyUiF1'
+login = 83342737
+password = 'ItH*TpY1'
 server = 'MetaQuotes-Demo'
+
 
 mt.login(login, password, server)
 
@@ -86,5 +87,3 @@ print(ohlc_data)
 
 # symbol_info = mt.symbol_info("EURUSD")._asdict()
 # print(symbol_info)
-
-
