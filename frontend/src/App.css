@@ -1,24 +1,29 @@
+/* Root element styles */
 #root {
   max-width: 1280px;
-  margin: 0;
+  margin: 0 auto; /* Center align the root */
   text-align: center;
+  font-family: 'Orbitron', sans-serif; /* Cyberpunk-style font */
 }
 
-
+/* Body styles */
 body {
   background-color: #0D0D0D;
-  margin: 0; 
+  color: #00FFFF; /* Neon cyan text color */
+  margin: 0;
   padding: 0;
 }
 
-
+/* Navbar styles */
 .navbar {
   overflow: hidden;
-  border: 2px solid #FF007F;
-  position:fixed;
-  top:0;
-  width:100%;
-  margin:0;
+  border: 2px solid #FF007F; /* Neon pink border */
+  background-color: #0D0D0D;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  left: 0;
+  z-index: 1000; 
 }
 
 .navbar a {
@@ -30,16 +35,18 @@ body {
   margin: 0;
   cursor: pointer;
 }
-.navbar a:hover{
-  font-weight:bold;
+
+.navbar a:hover {
+  font-weight: bold;
+  color: #FF007F; /* Change color to neon pink on hover */
 }
 
+/* Dropdown styles */
 .dropdown {
   position: relative;
   display: inline-block;
 }
 
-/* Dropdown button styling */
 .dropdown-button {
   background-color: #4CAF50;
   color: white;
@@ -49,34 +56,188 @@ body {
   cursor: pointer;
 }
 
-/* Dropdown content (hidden by default) */
 .dropdown-content {
   display: flex;
   flex-direction: column;
   position: absolute;
-  background-color: #f9f9f9;
+  background-color: #0D0D0D;
+  border: 1px solid #00FFFF;
   min-width: 160px;
   z-index: 1;
-  border: 1px solid #ccc; /* Add border */
-  border-top: none; /* Remove top border */
+  border-top: none;
 }
 
-/* Dropdown option styling */
 .dropdown-option {
-  color: black;
+  color: #00FFFF;
   padding: 12px 16px;
   text-decoration: none;
   cursor: pointer;
-  border-top: 1px solid #ccc; /* Add border */
+  border-top: 1px solid #00FFFF;
 }
 
-/* Style for selected option */
 .dropdown-option:hover {
-  background-color: #ddd;
+  background-color: #FF007F;
+  color: white;
+}
+
+/* Container styles */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 60px; /* Adjust for fixed navbar height */
+  padding: 20px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+    align-items: stretch; /* Stretch items to the same height */
+  }
+}
+
+/* News component styles */
+.news {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 2px solid #00FFFF;
+  max-width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 10px;
+  position: fixed;
+  top: 60px; /* Adjust based on the height of your navbar */
+  right: 20px; /* Adjust as needed */
+  cursor: pointer;
+}
+
+.news.collapsed {
+  max-width: 100px;
+  max-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.news.expanded {
+  max-width: 300px;
+  max-height: 400px;
+}
+
+/* Forex graph container styles */
+.forex-graph-container {
+  flex: 2;
+  box-sizing: border-box; 
+  border: 2px solid #00FFFF;
+  background-color: #1A1A1A;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Divider styles */
+.divider {
+  width: 2px;
+  background-color: #00FFFF;
+  margin: 0 20px;
+}
+
+/* News item styles */
+.news h1 {
+  margin-bottom: 10px;
+  color: #FF007F; /* Neon pink color */
+}
+
+.news p {
+  margin: 5px 0;
+  color: #00FFFF; /* Neon cyan color */
+}
+
+.news hr {
+  margin: 10px 0;
+  border: 0;
+  border-top: 1px solid #00FFFF; /* Neon cyan color */
+}
+
+/* Add cyberpunk animations */
+@keyframes glow {
+  0% { text-shadow: 0 0 1px #FF007F, 0 0 2px #FF007F, 0 0 3px #FF007F, 0 0 4px #FF007F; }
+  100% { text-shadow: 0 0 2px #FF007F, 0 0 4px #FF007F, 0 0 6px #FF007F, 0 0 8px #FF007F; }
+}
+
+.forex-graph-container,
+.news {
+  animation: glow 1s ease-in-out infinite alternate;
 }
 
 
-.forex-graph-container {
-  border: 1px solid #ccc; /* Example border style */
-  padding: 10px; /* Adjust padding as needed */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 10px 0;
+}
+
+/* Track styles */
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  background: #1A1A1A;
+  border: 1px solid #00FFFF;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #00FFFF, 0 0 10px #00FFFF;
+}
+
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  background: #1A1A1A;
+  border: 1px solid #00FFFF;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #00FFFF, 0 0 10px #00FFFF;
+}
+
+/* Thumb styles */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #FF007F;
+  border: 2px solid #00FFFF;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px #FF007F, 0 0 10px #FF007F;
+  margin-top: -6px; /* Adjust to align thumb with track */
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #FF007F;
+  border: 2px solid #00FFFF;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px #FF007F, 0 0 10px #FF007F;
+}
+
+/* Focus styles */
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: #1A1A1A;
+}
+
+input[type="range"]:focus::-moz-range-track {
+  background: #1A1A1A;
+}
+
+/* Disabled styles */
+input[type="range"]:disabled::-webkit-slider-thumb {
+  background: #666;
+  box-shadow: none;
+}
+
+input[type="range"]:disabled::-moz-range-thumb {
+  background: #666;
+  box-shadow: none;
 }

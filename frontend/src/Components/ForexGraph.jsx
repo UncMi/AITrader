@@ -30,79 +30,92 @@ function ForexGraph() {
   };
 
   useEffect(() => {
-  const options = {
-    series: [{
-      name: 'candle',
-      data: []
-    }],
-    chart: {
-      height: 350,
-      type: 'candlestick',
-    },
-    title: {
-      text: `EURUSD ${selectedTimeframe}`, // Dynamic title based on selectedTimeframe
-      align: 'left'
-    },
-    annotations: {
-      xaxis: [
-        {
-          x: 'Oct 06 14:00',
-          borderColor: '#00E396',
-          label: {
-            borderColor: '#00E396',
-            style: {
-              fontSize: '12px',
-              color: '#fff',
-              background: '#00E396'
-            },
-            orientation: 'horizontal',
-            offsetY: 7,
-            text: 'Annotation Test'
+    const options = {
+      series: [{
+        name: 'candle',
+        data: []
+      }],
+      chart: {
+        height: 350,
+        type: 'candlestick',
+        toolbar: {
+          show: true,
+          tools: {
+            download: true,
+            selection: true,
+            zoom: true,
+            zoomin: false,
+            zoomout: false,
+            pan: false,
+            reset: false,
+            customIcons: []
           }
         }
-      ]
-    },
-    tooltip: {
-      enabled: true,
-    },
-    xaxis: {
-      type: 'category',
-      labels: {
-        formatter: function(val) {
-          return dayjs(val).format('MMM DD HH:mm');
-        },
-        style: {
-          colors: '#D100FF' // Set the color for x-axis labels
-        }
       },
-      axisBorder: {
-        show: true,
-        color: '#FF0000' // Set the color for the x-axis border
+      title: {
+        text: `EURUSD ${selectedTimeframe}`, // Dynamic title based on selectedTimeframe
+        align: 'left'
       },
-      axisTicks: {
-        show: true,
-        color: '#FF0000' // Set the color for the x-axis ticks
-      }
-    },
-    yaxis: {
+      annotations: {
+        xaxis: [
+          {
+            x: 'Oct 06 14:00',
+            borderColor: '#00E396',
+            label: {
+              borderColor: '#00E396',
+              style: {
+                fontSize: '12px',
+                color: '#fff',
+                background: '#00E396'
+              },
+              orientation: 'horizontal',
+              offsetY: 7,
+              text: 'Annotation Test'
+            }
+          }
+        ]
+      },
       tooltip: {
-        enabled: true
+        enabled: true,
       },
-      labels: {
-        style: {
-          colors: '#D100FF' // Set the color for y-axis labels
+      xaxis: {
+        type: 'category',
+        labels: {
+          formatter: function(val) {
+            return dayjs(val).format('MMM DD HH:mm');
+          },
+          style: {
+            colors: '#D100FF' // Set the color for x-axis labels
+          }
+        },
+        axisBorder: {
+          show: true,
+          color: '#FF0000' // Set the color for the x-axis border
+        },
+        axisTicks: {
+          show: true,
+          color: '#FF0000' // Set the color for the x-axis ticks
         }
       },
-      axisBorder: {
-        show: true,
-        color: '#FF0000' // Set the color for the y-axis border
-      },
-      axisTicks: {
-        show: true,
-        color: '#FF0000' // Set the color for the y-axis ticks
+      yaxis: {
+        tooltip: {
+          enabled: true
+        },
+        labels: {
+          style: {
+            colors: '#D100FF' // Set the color for y-axis labels
+          }
+        },
+        axisBorder: {
+          show: true,
+          color: '#FF0000' // Set the color for the y-axis border
+        },
+        axisTicks: {
+          show: true,
+          color: '#FF0000' // Set the color for the y-axis ticks
+        }
       }
-    }
-  };
+    };
 
     // Destroy existing chart if it exists
     if (chart) {
